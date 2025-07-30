@@ -62,30 +62,25 @@ const handleSubmit = async () => {
 // }, []);
 
 const validateForm = () => {
-    // Email validation
-    if (!email) {
-      Alert.alert('Error', 'Email is required');
-      return false;
-    }
-    
-    if (!/\S+@\S+\.\S+/.test(email)) {
-      Alert.alert('Error', 'Please enter a valid email address');
-      return false;
-    }
+  let newErrors = {};
 
-    // Password validation
-    if (!password) {
-      Alert.alert('Error', 'Password is required');
-      return false;
-    }
-    
-    if (password.length < 6) {
-      Alert.alert('Error', 'Password must be at least 6 characters');
-      return false;
-    }
+  if (!email) {
+    newErrors.email = 'Email is required';
+  } else if (!/\S+@\S+\.\S+/.test(email)) {
+    newErrors.email = 'Please enter a valid email address';
+  }
 
-    return true;
-  };
+  if (!password) {
+    newErrors.password = 'Password is required';
+  } else if (password.length < 6) {
+    newErrors.password = 'Password must be at least 6 characters';
+  }
+
+  setErrors(newErrors);
+
+  return Object.keys(newErrors).length === 0;
+};
+
 
   return (
     <SafeAreaProvider>
@@ -223,6 +218,13 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     fontWeight: 'bold',
+  },
+
+
+  error: {
+    color: 'red',
+    fontSize: 13,
+    alignSelf: "flex-start"
   },
 
   createText: {

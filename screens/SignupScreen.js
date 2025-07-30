@@ -20,44 +20,34 @@ const SignupScreen = ({ navigation }) => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [errors, setErrors] = useState({});
 
-  const validateForm = () => {
-      if (!email) {
-        Alert.alert('Error', 'Email is required');
-        return false;
-      }
-      
-      if (!/\S+@\S+\.\S+/.test(email)) {
-        Alert.alert('Error', 'Please enter a valid email address');
-        return false;
-      }
-  
-      if (!password) {
-        Alert.alert('Error', 'Password is required');
-        return false;
-      }
-      
-      if (password.length < 6) {
-        Alert.alert('Error', 'Password must be at least 6 characters');
-        return false;
-      }
+const validateForm = () => {
+  let newErrors = {};
 
-      if (!confirmPassword) {
-        Alert.alert('Error', 'Password is required');
-        return false;
-      }
-      
-      if (confirmPassword.length < 6) {
-        Alert.alert('Error', 'Password must be at least 6 characters');
-        return false;
-      }
-  
-     if (confirmPassword !== password){
-        Alert.alert('Error', 'Enter same password as before')
-        return false;
-      }
-      
-      return true;
-    };
+  if (!email) {
+    newErrors.email = 'Email is required';
+  } else if (!/\S+@\S+\.\S+/.test(email)) {
+    newErrors.email = 'Please enter a valid email address';
+  }
+
+  if (!password) {
+    newErrors.password = 'Password is required';
+  } else if (password.length < 6) {
+    newErrors.password = 'Password must be at least 6 characters';
+  }
+
+  if (!confirmPassword) {
+    newErrors.confirmPassword = 'Please confirm your password';
+  } else if (confirmPassword.length < 6) {
+    newErrors.confirmPassword = 'Password must be at least 6 characters';
+  } else if (confirmPassword !== password) {
+    newErrors.confirmPassword = 'Passwords do not match';
+  }
+
+  setErrors(newErrors);
+
+  return Object.keys(newErrors).length === 0;
+};
+
   
 
 const handleSubmit = async () => {
@@ -194,6 +184,12 @@ const styles = StyleSheet.create({
     height: 20,
     marginLeft: 10,
     color: '#1F41BB',
+  },
+
+  error: {
+    color: 'red',
+    fontSize: 13,
+    alignSelf: "flex-start"
   },
 
   textHeading: {

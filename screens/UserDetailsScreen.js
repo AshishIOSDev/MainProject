@@ -3,14 +3,14 @@ import {
   ScrollView,
   TextInput,
   TouchableOpacity,
+  View,
   Text,
-  Alert,
   StyleSheet,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
-const SignupDetailsScreen = ({ route, navigation }) => {
+const UserDetailsScreen = ({ route, navigation }) => {
   const { email, password } = route.params;
 
   const [mobile, setMobile] = useState('');
@@ -23,23 +23,25 @@ const SignupDetailsScreen = ({ route, navigation }) => {
   const [education, setEducation] = useState('');
   const [age, setAge] = useState('');
   const [skill, setSkill] = useState('');
+  const [errors, setErrors] = useState({});
 
   const handleFinalSubmit = async () => {
-    if (
-      !mobile ||
-      !name ||
-      !address ||
-      !state ||
-      !city ||
-      !pin ||
-      !gender ||
-      !education ||
-      !age ||
-      !skill
-    ) {
-      Alert.alert('Error', 'Please fill all details');
-      return;
-    }
+    let newErrors = {};
+
+    if (!mobile) newErrors.mobile = 'Mobile is required';
+    if (!name) newErrors.name = 'Name is required';
+    if (!address) newErrors.address = 'Address is required';
+    if (!state) newErrors.state = 'State is required';
+    if (!city) newErrors.city = 'City is required';
+    if (!pin) newErrors.pin = 'Pin Code is required';
+    if (!gender) newErrors.gender = 'Gender is required';
+    if (!education) newErrors.education = 'Education is required';
+    if (!age) newErrors.age = 'Age is required';
+    if (!skill) newErrors.skill = 'Skill is required';
+
+    setErrors(newErrors);
+
+    if (Object.keys(newErrors).length > 0) return;
 
     const newUser = {
       email,
@@ -67,126 +69,87 @@ const SignupDetailsScreen = ({ route, navigation }) => {
     navigation.replace('HomeScreen');
   };
 
+  const renderInput = (label, value, setter, fieldName, keyboardType = 'default') => (
+    <View>
+      <TextInput
+        placeholder={label}
+        keyboardType={keyboardType}
+        placeholderTextColor="black"
+        style={styles.input}
+        value={value}
+        onChangeText={(text) => {
+          setter(text);
+          setErrors((prev) => ({ ...prev, [fieldName]: '' }));
+        }}
+      />
+      {errors[fieldName] ? <Text style={styles.error}>{errors[fieldName]}</Text> : null}
+    </View>
+  );
+
   return (
-    <SafeAreaProvider>
-      <SafeAreaView>
-        <ScrollView contentContainerStyle={styles.container}>
-          <Text style={styles.heading}>Complete Your Profile</Text>
+    <SafeAreaView style={styles.container}>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        {renderInput('Mobile', mobile, setMobile, 'mobile', 'number-pad')}
+        {renderInput('Name', name, setName, 'name')}
+        {renderInput('Address', address, setAddress, 'address')}
+        {renderInput('State', state, setState, 'state')}
+        {renderInput('City', city, setCity, 'city')}
+        {renderInput('Pin Code', pin, setPin, 'pin', 'number-pad')}
+        {renderInput('Gender', gender, setGender, 'gender')}
+        {renderInput('Education', education, setEducation, 'education')}
+        {renderInput('Age', age, setAge, 'age', 'number-pad')}
+        {renderInput('Skill', skill, setSkill, 'skill')}
 
-          <TextInput
-            placeholder="Mobile"
-            placeholderTextColor= 'black'
-            style={styles.input}
-            onChangeText={setMobile}
-            value={mobile}
-          />
-          <TextInput
-            placeholder="Name"
-            placeholderTextColor= 'black'
-            style={styles.input}
-            onChangeText={setName}
-            value={name}
-          />
-          <TextInput
-            placeholder="Address"
-            placeholderTextColor= 'black'
-            style={styles.input}
-            onChangeText={setAddress}
-            value={address}
-          />
-          <TextInput
-            placeholder="State"
-            placeholderTextColor= 'black'
-            style={styles.input}
-            onChangeText={setState}
-            value={state}
-          />
-          <TextInput
-            placeholder="City"
-            placeholderTextColor= 'black'
-            style={styles.input}
-            onChangeText={setCity}
-            value={city}
-          />
-          <TextInput
-            placeholder="Pin Code"
-            placeholderTextColor= 'black'
-            style={styles.input}
-            onChangeText={setPin}
-            value={pin}
-          />
-          <TextInput
-            placeholder="Gender"
-            placeholderTextColor= 'black'
-            style={styles.input}
-            onChangeText={setGender}
-            value={gender}
-          />
-          <TextInput
-            placeholder="Education"
-            placeholderTextColor= 'black'
-            style={styles.input}
-            onChangeText={setEducation}
-            value={education}
-          />
-          <TextInput
-            placeholder="Age"
-            placeholderTextColor= 'black'
-            style={styles.input}
-            onChangeText={setAge}
-            value={age}
-            keyboardType="number-pad"
-          />
-          <TextInput
-            placeholder="Skill"
-            placeholderTextColor= 'black'
-            style={styles.input}
-            onChangeText={setSkill}
-            value={skill}
-          />
-
-          <TouchableOpacity style={styles.button} onPress={handleFinalSubmit}>
-            <Text style={styles.buttonText}>Submit & Register</Text>
-          </TouchableOpacity>
-        </ScrollView>
-      </SafeAreaView>
-    </SafeAreaProvider>
+        <TouchableOpacity style={styles.button} onPress={handleFinalSubmit}>
+          <Text style={styles.buttonText}>Submit</Text>
+        </TouchableOpacity>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
-  },
-
-  heading: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    color: '#1F41BB',
-    textAlign: 'center',
-    marginBottom: 20,
+    flex: 1,
+    paddingHorizontal: 20,
+    marginTop: 30,
   },
   input: {
+    height: 40,
     borderWidth: 1,
+    borderRadius: 10,
+    paddingHorizontal: 10,
+    marginBottom: 10,
+    color: 'black',
     borderColor: 'midnightblue',
-    borderRadius: 8,
-    padding: 10,
-    marginBottom: 15,
+    fontSize: 15,
+    marginVertical: 10,
+    paddingLeft: 10,
     backgroundColor: '#F1F4FF',
+    tintColor: '#F1F4FF',
+    shadowColor: 'midnightblue',
+    shadowOpacity: 0.9,
+    shadowOffset: 'bottom',
   },
   button: {
-    backgroundColor: '#1F41BB',
-    padding: 15,
+    backgroundColor: '#007AFF',
     borderRadius: 10,
+    paddingVertical: 15,
     alignItems: 'center',
-    marginTop: 10,
+    marginTop: 20,
+    marginBottom: 40,
   },
-  
-  buttonText: { 
-    color: '#fff',
-     fontSize: 16,
-      fontWeight: 'bold' 
-    },
+  buttonText: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 18,
+  },
+  error: {
+    color: 'red',
+    marginBottom: 10,
+    marginLeft: 4,
+    fontSize: 13,
+  },
 });
 
-export default SignupDetailsScreen;
+export default UserDetailsScreen;
