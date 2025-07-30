@@ -8,21 +8,23 @@ import {
   StyleSheet,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const UserDetailsScreen = ({ route, navigation }) => {
-  const { email, password } = route.params;
+  // const { email, password } = route.params;
+  const { email, password, user, index } = route.params || {};
 
-  const [mobile, setMobile] = useState('');
-  const [name, setName] = useState('');
-  const [address, setAddress] = useState('');
-  const [state, setState] = useState('');
-  const [city, setCity] = useState('');
-  const [pin, setPin] = useState('');
-  const [gender, setGender] = useState('');
-  const [education, setEducation] = useState('');
-  const [age, setAge] = useState('');
-  const [skill, setSkill] = useState('');
+  const [mobile, setMobile] = useState(user?.mobile || '');
+  const [name, setName] = useState(user?.name || '');
+  const [address, setAddress] = useState(user?.address || '');
+  const [state, setState] = useState(user?.state || '');
+  const [city, setCity] = useState(user?.city || '');
+  const [pin, setPin] = useState(user?.pin || '');
+  const [gender, setGender] = useState(user?.gender || '');
+  const [education, setEducation] = useState(user?.education || '');
+  const [age, setAge] = useState(user?.age || '');
+  const [skill, setSkill] = useState(user?.skill || '');
   const [errors, setErrors] = useState({});
 
   const handleFinalSubmit = async () => {
@@ -40,12 +42,11 @@ const UserDetailsScreen = ({ route, navigation }) => {
     if (!skill) newErrors.skill = 'Skill is required';
 
     setErrors(newErrors);
-
     if (Object.keys(newErrors).length > 0) return;
 
     const newUser = {
-      email,
-      password,
+      email: user?.email || email,
+      password: user?.password || password,
       mobile,
       name,
       address,
@@ -61,15 +62,27 @@ const UserDetailsScreen = ({ route, navigation }) => {
     const existing = await AsyncStorage.getItem('users');
     const users = existing ? JSON.parse(existing) : [];
 
-    users.push(newUser);
-    await AsyncStorage.setItem('users', JSON.stringify(users));
-    await AsyncStorage.setItem('userEmail', email);
-    await AsyncStorage.setItem('userPassword', password);
+    if (typeof index === 'number') {
+      // Update existing user
+      users[index] = newUser;
+    } else {
+      // Add new user
+      users.push(newUser);
+      await AsyncStorage.setItem('userEmail', email);
+      await AsyncStorage.setItem('userPassword', password);
+    }
 
+    await AsyncStorage.setItem('users', JSON.stringify(users));
     navigation.replace('HomeScreen');
   };
 
-  const renderInput = (label, value, setter, fieldName, keyboardType = 'default') => (
+  const renderInput = (
+    label,
+    value,
+    setter,
+    fieldName,
+    keyboardType = 'default',
+  ) => (
     <View>
       <TextInput
         placeholder={label}
@@ -77,17 +90,27 @@ const UserDetailsScreen = ({ route, navigation }) => {
         placeholderTextColor="black"
         style={styles.input}
         value={value}
-        onChangeText={(text) => {
+        onChangeText={text => {
           setter(text);
-          setErrors((prev) => ({ ...prev, [fieldName]: '' }));
+          setErrors(prev => ({ ...prev, [fieldName]: '' }));
         }}
       />
-      {errors[fieldName] ? <Text style={styles.error}>{errors[fieldName]}</Text> : null}
+      {errors[fieldName] ? (
+        <Text style={styles.error}>{errors[fieldName]}</Text>
+      ) : null}
     </View>
   );
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaProvider>
+
+ <SafeAreaView style={styles.container}>
+      <TouchableOpacity
+                style={styles.backButton}
+                onPress={() => navigation.goBack('Signup')}
+              >
+                <Icon name="arrow-left" size={25} color="#1F41BB" />
+              </TouchableOpacity>
       <ScrollView showsVerticalScrollIndicator={false}>
         {renderInput('Mobile', mobile, setMobile, 'mobile', 'number-pad')}
         {renderInput('Name', name, setName, 'name')}
@@ -101,10 +124,15 @@ const UserDetailsScreen = ({ route, navigation }) => {
         {renderInput('Skill', skill, setSkill, 'skill')}
 
         <TouchableOpacity style={styles.button} onPress={handleFinalSubmit}>
-          <Text style={styles.buttonText}>Submit</Text>
+          <Text style={styles.buttonText}>
+            {typeof index === 'number' ? 'Update' : 'Submit'}
+          </Text>
         </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>
+    
+    </SafeAreaProvider>
+   
   );
 };
 
@@ -112,8 +140,15 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: 20,
-    marginTop: 30,
   },
+
+    backButton: {
+    width: 30,
+    height: 20,
+    marginBottom: 30,
+    color: '#1F41BB',
+  },
+
   input: {
     height: 40,
     borderWidth: 1,

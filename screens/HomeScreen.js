@@ -61,6 +61,18 @@ const HomeScreen = ({ navigation }) => {
           <Text style={styles.userDetail}>Skill: {item.skill}</Text>
 
           <TouchableOpacity
+            onPress={() =>
+              navigation.navigate('UserDetails', { user: item, index })
+            }
+            style={[
+              styles.deleteButton,
+              { backgroundColor: '#1F41BB', marginBottom: 10 },
+            ]}
+          >
+            <Text style={styles.deleteText}>Edit User</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
             onPress={() => handleDeleteUser(index)}
             style={styles.deleteButton}
           >
