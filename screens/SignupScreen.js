@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import {
+  Alert,
   ScrollView,
   TextInput,
   TouchableOpacity,
@@ -8,16 +9,89 @@ import {
   Image,
   StyleSheet,
 } from 'react-native';
+
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const SignupScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [errors, setErrors] = useState({});
+
+  const validateForm = () => {
+      if (!email) {
+        Alert.alert('Error', 'Email is required');
+        return false;
+      }
+      
+      if (!/\S+@\S+\.\S+/.test(email)) {
+        Alert.alert('Error', 'Please enter a valid email address');
+        return false;
+      }
+  
+      if (!password) {
+        Alert.alert('Error', 'Password is required');
+        return false;
+      }
+      
+      if (password.length < 6) {
+        Alert.alert('Error', 'Password must be at least 6 characters');
+        return false;
+      }
+
+      if (!confirmPassword) {
+        Alert.alert('Error', 'Password is required');
+        return false;
+      }
+      
+      if (confirmPassword.length < 6) {
+        Alert.alert('Error', 'Password must be at least 6 characters');
+        return false;
+      }
+  
+     if (confirmPassword !== password){
+        Alert.alert('Error', 'Enter same password as before')
+        return false;
+      }
+      
+      return true;
+    };
+  
+
+const handleSubmit = async () => {
+  if (validateForm()) {
+    const existing = await AsyncStorage.getItem('users');
+    const users = existing ? JSON.parse(existing) : [];
+
+    const userExists = users.find(u => u.email === email);
+    if (userExists) {
+      Alert.alert('Error', 'This email is already registered');
+      return;
+    }
+
+    // Store email/password temporarily in navigation state
+    navigation.navigate('UserDetails', {
+      email,
+      password,
+    });
+  }
+};
+
+
+
 
   return (
     <SafeAreaProvider>
       <SafeAreaView>
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => navigation.goBack('Signup')}
+        >
+          <Icon name="arrow-left" size={25} color="#1F41BB" />
+        </TouchableOpacity>
+
         <ScrollView>
           <View style={styles.container}>
             <Text style={styles.heading}>Create Account</Text>
@@ -29,10 +103,13 @@ const SignupScreen = ({ navigation }) => {
               <TextInput
                 style={styles.CustomTextInput}
                 placeholderTextColor="black"
+                keyboardType= 'email-address'
                 placeholder="Email"
                 value={email}
-                onChangeText={text => setEmail(text)}
+                // onChangeText={text => setEmail(text)}
+                onChangeText={setEmail}
               />
+              {errors.email && <Text style={styles.error}>{errors.email}</Text>}
 
               <TextInput
                 style={styles.CustomTextInput}
@@ -40,8 +117,10 @@ const SignupScreen = ({ navigation }) => {
                 placeholder="Password"
                 secureTextEntry={true}
                 value={password}
-                onChangeText={text => setPassword(text)}
+                onChangeText={setPassword}
               />
+              {errors.password && <Text style={styles.error}>{errors.password}</Text>}
+
 
               <TextInput
                 style={styles.CustomTextInput}
@@ -51,12 +130,13 @@ const SignupScreen = ({ navigation }) => {
                 value={confirmPassword}
                 onChangeText={text => setConfirmPassword(text)}
               />
+              {errors.confirmPassword && <Text style={styles.error}>{errors.confirmPassword}</Text>}
 
               <TouchableOpacity
                 style={styles.buttonStyle}
-                onPress={() => navigation.navigate('Signup')}
+                onPress={handleSubmit}
               >
-                <Text style={styles.buttonText}>Sign in</Text>
+                <Text style={styles.buttonText}>Sign up</Text>
               </TouchableOpacity>
 
               <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -106,6 +186,13 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     paddingHorizontal: 40,
+    color: '#1F41BB',
+  },
+
+  backButton: {
+    width: 30,
+    height: 20,
+    marginLeft: 10,
     color: '#1F41BB',
   },
 

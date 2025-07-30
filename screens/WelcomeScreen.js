@@ -1,18 +1,12 @@
 import React from 'react';
-import {
-  Image,
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-} from 'react-native';
+import { Image, View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
 const WelcomScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Image
         source={require('/Users/ie14/Projects/MyApp/React-Native/Training/MainProject/assets/images/welcomeImage.png')}
-        style={{ width: '368', height: '422' }}
+        style={{ width: 368, height: 422 }}
       />
       <Text style={styles.heading}>Discover Your Dream Job here</Text>
       <Text style={styles.textHeading}>
@@ -23,14 +17,14 @@ const WelcomScreen = ({ navigation }) => {
       <View style={styles.horizontalView}>
         <TouchableOpacity
           style={styles.buttonStyle}
-          onPress={() => navigation.navigation('Login')}
+          onPress={() => navigation.navigate('Login')}
         >
           <Text style={styles.buttonText}>Log In</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           style={styles.buttonStyle}
-          onPress={() => navigation.navigate('Login')}
+          onPress={() => navigation.navigate('Signup')}
         >
           <Text style={styles.buttonText}>Sign Up</Text>
         </TouchableOpacity>
@@ -51,6 +45,7 @@ const styles = StyleSheet.create({
     color: '#1F41BB',
     fontFamily: 'Poppins',
   },
+
   textHeading: {
     fontSize: 14,
     marginBottom: 20,
@@ -73,9 +68,15 @@ const styles = StyleSheet.create({
     shadowOffset: 'bottom',
   },
 
-  buttonText: { color: '#fff', fontSize: 16, fontWeight: 'bold' ,shadowColor: 'midnightblue',
+  buttonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
+    shadowColor: 'midnightblue',
     shadowOpacity: 0.9,
-    shadowOffset: 'bottom',},
+    shadowOffset: 'bottom',
+  },
+
   horizontalView: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -84,6 +85,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     marginTop: 20,
   },
+  
 });
 
 export default WelcomScreen;
