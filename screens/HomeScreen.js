@@ -66,7 +66,7 @@ const HomeScreen = ({ navigation }) => {
             }
             style={[
               styles.deleteButton,
-              { backgroundColor: '#1F41BB', marginBottom: 10 },
+              { backgroundColor: '#1F41BB' },
             ]}
           >
             <Text style={styles.deleteText}>Edit User</Text>
