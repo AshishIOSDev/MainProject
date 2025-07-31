@@ -117,13 +117,13 @@ const styles = StyleSheet.create({
   },
 
   userName: {
-    fontSize: 24,
+    fontSize: 20,
     fontWeight: 'bold',
     color: '#1F41BB',
   },
 
   userEmail: {
-    fontSize: 19,
+    fontSize: 17,
     color: '#555',
     fontWeight: 'bold',
     marginBottom: 10,

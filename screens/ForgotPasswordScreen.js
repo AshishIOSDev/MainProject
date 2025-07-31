@@ -13,30 +13,48 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const ForgotPasswordScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
+  const [otp, setOtp] = useState('');
+  const [generatedOtp, setGeneratedOtp] = useState('');
   const [newPassword, setNewPassword] = useState('');
-  const [confirmVisible, setConfirmVisible] = useState(false);
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [step, setStep] = useState('email'); // 'email' | 'otp' | 'password'
 
   const checkEmailExists = async () => {
-    const storedUsers = await AsyncStorage.getItem('users');
-    const users = storedUsers ? JSON.parse(storedUsers) : [];
-
-    const userExists = users.find(u => u.email === email);
-
     if (!email) {
       Alert.alert('Error', 'Please enter your email');
       return;
     }
 
+    const storedUsers = await AsyncStorage.getItem('users');
+    const users = storedUsers ? JSON.parse(storedUsers) : [];
+    const userExists = users.find(u => u.email === email);
+
     if (!userExists) {
       Alert.alert('Not Found', 'This email is not registered.');
     } else {
-      setConfirmVisible(true);  
+      const otpCode = Math.floor(1000 + Math.random() * 9000).toString();
+      setGeneratedOtp(otpCode);
+      Alert.alert('OTP Sent', `Your OTP is: ${otpCode}`);
+      setStep('otp');
+    }
+  };
+
+  const verifyOtp = () => {
+    if (otp === generatedOtp) {
+      setStep('password');
+    } else {
+      Alert.alert('Invalid OTP', 'Please enter the correct OTP sent to your email.');
     }
   };
 
   const updatePassword = async () => {
     if (!newPassword || newPassword.length < 6) {
       Alert.alert('Error', 'Password must be at least 6 characters');
+      return;
+    }
+
+    if (newPassword !== confirmPassword) {
+      Alert.alert('Mismatch', 'Passwords do not match');
       return;
     }
 
@@ -48,7 +66,6 @@ const ForgotPasswordScreen = ({ navigation }) => {
 
     await AsyncStorage.setItem('users', JSON.stringify(users));
     Alert.alert('Success', 'Password updated successfully');
-
     navigation.navigate('Login');
   };
 
@@ -65,21 +82,41 @@ const ForgotPasswordScreen = ({ navigation }) => {
         <ScrollView contentContainerStyle={styles.container}>
           <Text style={styles.heading}>Forgot Password</Text>
 
-          <TextInput
-            style={styles.input}
-            placeholder="Enter your email"
-            value={email}
-            onChangeText={setEmail}
-            keyboardType="email-address"
-          />
-
-          {!confirmVisible && (
-            <TouchableOpacity style={styles.button} onPress={checkEmailExists}>
-              <Text style={styles.buttonText}>Check Email</Text>
-            </TouchableOpacity>
+          {step === 'email' && (
+            <>
+              <TextInput
+                style={styles.input}
+                placeholder="Enter your email"
+                value={email}
+                onChangeText={setEmail}
+                keyboardType="email-address"
+              />
+              <TouchableOpacity style={styles.button} onPress={checkEmailExists}>
+                <Text style={styles.buttonText}>Check Email</Text>
+              </TouchableOpacity>
+            </>
           )}
 
-          {confirmVisible && (
+          {step === 'otp' && (
+            <>
+              <Text style={{ marginBottom: 10, color: 'gray', textAlign: 'center' }}>
+                OTP sent to: {email}
+              </Text>
+              <TextInput
+                style={styles.input}
+                placeholder="Enter OTP"
+                value={otp}
+                onChangeText={setOtp}
+                keyboardType="number-pad"
+                maxLength={4}
+              />
+              <TouchableOpacity style={styles.button} onPress={verifyOtp}>
+                <Text style={styles.buttonText}>Verify OTP</Text>
+              </TouchableOpacity>
+            </>
+          )}
+
+          {step === 'password' && (
             <>
               <TextInput
                 style={styles.input}
@@ -88,7 +125,13 @@ const ForgotPasswordScreen = ({ navigation }) => {
                 value={newPassword}
                 onChangeText={setNewPassword}
               />
-
+              <TextInput
+                style={styles.input}
+                placeholder="Confirm new password"
+                secureTextEntry
+                value={confirmPassword}
+                onChangeText={setConfirmPassword}
+              />
               <TouchableOpacity style={styles.button} onPress={updatePassword}>
                 <Text style={styles.buttonText}>Update Password</Text>
               </TouchableOpacity>
@@ -126,26 +169,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 20,
   },
-
   backButton: {
     width: 30,
     height: 20,
     marginLeft: 10,
     color: '#1F41BB',
   },
-
   buttonText: {
     color: '#fff',
     fontWeight: 'bold',
   },
-
-  linkText: {
-    color: '#1F41BB',
-    textAlign: 'center',
-    marginTop: 20,
-    fontSize: 16,
-  },
-
 });
 
 export default ForgotPasswordScreen;

@@ -63,10 +63,8 @@ const UserDetailsScreen = ({ route, navigation }) => {
     const users = existing ? JSON.parse(existing) : [];
 
     if (typeof index === 'number') {
-      // Update existing user
       users[index] = newUser;
     } else {
-      // Add new user
       users.push(newUser);
       await AsyncStorage.setItem('userEmail', email);
       await AsyncStorage.setItem('userPassword', password);
@@ -130,7 +128,6 @@ const UserDetailsScreen = ({ route, navigation }) => {
         </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>
-    
     </SafeAreaProvider>
    
   );
