@@ -30,7 +30,7 @@ const App = () => {
   }, []);
 
   const renderItem = ({ item }) => (
-    <View style={styles.itemContainer}>
+    <View style={styles.productCard}>
       <Image source={{ uri: item.thumbnail }} style={styles.image} />
       <View style={styles.textContainer}>
         <Text style={styles.title}>{item.title}</Text>
@@ -48,12 +48,11 @@ const App = () => {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView >
       <FlatList
         data={products}
         keyExtractor={(item) => item.id.toString()}
         renderItem={renderItem}
-        ItemSeparatorComponent={() => <View style={styles.separator} />}
       />
     </SafeAreaView>
   );
@@ -62,10 +61,20 @@ const App = () => {
 export default App;
 
 const styles = StyleSheet.create({
-  container: {
+    productCard: {
     flex: 1,
     padding: 12,
-    backgroundColor: '#fff',
+    backgroundColor: '#F1F4FF',
+    marginVertical: 10,
+    marginHorizontal: 15,
+    borderRadius: 10,
+    alignItems: 'center', 
+    elevation: 3,
+    shadowOffset: 'bottom',
+    shadowOpacity: 0.9,
+    shadowColor: 'midnightblue',
+    tintColor: '#F1F4FF',
+    borderColor: 'midnightblue',
   },
 
   itemContainer: {
@@ -74,8 +83,8 @@ const styles = StyleSheet.create({
   },
 
   image: {
-    width: 270,
-    height: 270,
+    width: 230,
+    height: 200,
     borderRadius: 10,
     resizeMode: 'cover',
   },
@@ -98,13 +107,6 @@ const styles = StyleSheet.create({
     color: 'green',
     marginVertical: 4,
     textAlign: 'left',
-  },
-
-  separator: {
-    height: 3,
-    backgroundColor: 'black',
-    shadowColor: 'midnightblue',
-    shadowOpacity: 0.6,
   },
 
   loader: {
