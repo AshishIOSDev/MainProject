@@ -4,6 +4,9 @@ import React, { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+
 
 import LoginScreen from './screens/LoginScreen';
 import SignupScreen from './screens/SignupScreen';
@@ -15,8 +18,62 @@ import BirthdayScreen from './screens/OnBoarding/BirthdayScreen';
 import GenderScreen from './screens/OnBoarding/GenderScreen';
 import HomeScreen from './screens/HomeScreen';
 import UserDetailsScreen from './screens/UserDetailsScreen'
+import PhotoListScreen from './screens/OnBoarding/PhotoListScreen';
+import { View, Text } from 'react-native'; // for dummy screen
+
 
 const Stack = createNativeStackNavigator();
+const Tab = createBottomTabNavigator();
+
+
+
+const SettingsScreen = () => (
+  <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+    <Text>Settings Screen</Text>
+  </View>
+);
+
+
+const MainTabs = () => (
+  <Tab.Navigator
+    screenOptions={{
+      tabBarActiveTintColor: '#1F41BB',
+      tabBarLabelStyle: { fontWeight: 'bold' },
+      headerShown: false,
+    }}
+  >
+    <Tab.Screen
+      name="Home"
+      component={HomeScreen}
+      options={{
+        // eslint-disable-next-line react/no-unstable-nested-components
+        tabBarIcon: ({ color, size }) => (
+          <Icon name="home" color={color} size={size} />
+        ),
+      }}
+    />
+    <Tab.Screen
+      name="Product"
+      component={PhotoListScreen}
+      options={{
+        // eslint-disable-next-line react/no-unstable-nested-components
+        tabBarIcon: ({ color, size }) => (
+          <Icon name="animation" color={color} size={size} />
+        ),
+      }}
+    />
+    <Tab.Screen
+      name="Settings"
+      component={SettingsScreen}
+      options={{
+        // eslint-disable-next-line react/no-unstable-nested-components
+        tabBarIcon: ({ color, size }) => (
+          <Icon name="cog" color={color} size={size} />
+        ),
+      }}
+    />
+  </Tab.Navigator>
+);
 
 const App = () => {
   const [initialRoute, setInitialRoute] = useState<string | null>(null);
@@ -26,7 +83,7 @@ const App = () => {
       const email = await AsyncStorage.getItem('userEmail');
       const password = await AsyncStorage.getItem('userPassword');
       if (email && password) {
-        setInitialRoute('HomeScreen');
+        setInitialRoute('MainTabs');
       } else {
         setInitialRoute('WalkthroughScreen');
       }
@@ -35,8 +92,7 @@ const App = () => {
   }, []);
 
   if (!initialRoute) {
-    // Loading indicator dikha sakte hain
-    return null;
+        return null;
   }
 
   return (
@@ -52,6 +108,8 @@ const App = () => {
         <Stack.Screen name="BirthdayScreen" component={BirthdayScreen}/>
         <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
         <Stack.Screen name='HomeScreen' component={HomeScreen} />
+        <Stack.Screen name='PhotoListScreen' component={PhotoListScreen} />
+        <Stack.Screen name="MainTabs" component={MainTabs} />
       </Stack.Navigator>
     </NavigationContainer>
   );
