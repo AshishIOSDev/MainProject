@@ -18,7 +18,8 @@ import BirthdayScreen from './screens/OnBoarding/BirthdayScreen';
 import GenderScreen from './screens/OnBoarding/GenderScreen';
 import HomeScreen from './screens/HomeScreen';
 import UserDetailsScreen from './screens/UserDetailsScreen'
-import PhotoListScreen from './screens/OnBoarding/PhotoListScreen';
+import PhotoListScreen from './screens/PhotoListScreen';
+import ProductDetails from './screens/ProductDetails'
 import { View, Text } from 'react-native'; // for dummy screen
 
 
@@ -109,6 +110,7 @@ const App = () => {
         <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
         <Stack.Screen name='HomeScreen' component={HomeScreen} />
         <Stack.Screen name='PhotoListScreen' component={PhotoListScreen} />
+        <Stack.Screen name="ProductDetails" component={ProductDetails} />
         <Stack.Screen name="MainTabs" component={MainTabs} />
       </Stack.Navigator>
     </NavigationContainer>

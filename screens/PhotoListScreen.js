@@ -7,9 +7,10 @@ import {
   ActivityIndicator,
   StyleSheet,
   SafeAreaView,
+  TouchableOpacity,
 } from 'react-native';
 
-const App = () => {
+const App = ({ navigation }) => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -30,13 +31,17 @@ const App = () => {
   }, []);
 
   const renderItem = ({ item }) => (
-    <View style={styles.productCard}>
+    <TouchableOpacity
+      onPress={() => navigation.navigate('ProductDetails', { product: item })}
+    >
+      <View style={styles.productCard}>
       <Image source={{ uri: item.thumbnail }} style={styles.image} />
       <View style={styles.textContainer}>
         <Text style={styles.title}>{item.title}</Text>
         <Text style={styles.price}>$ {item.price}</Text>
       </View>
-    </View>
+      </View>
+      </TouchableOpacity>
   );
 
   if (loading) {
