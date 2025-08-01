@@ -1,5 +1,5 @@
 import React from 'react';
-import { SafeAreaView ,View, Text, Image, StyleSheet, ScrollView ,TouchableOpacity } from 'react-native';
+import { SafeAreaView , Text, Image, StyleSheet, ScrollView ,TouchableOpacity } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 

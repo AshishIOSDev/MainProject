@@ -86,9 +86,9 @@ const HomeScreen = ({ navigation }) => {
   return (
     <SafeAreaProvider>
       <SafeAreaView>
-        <TouchableOpacity onPress={handleLogout} style={styles.buttonStyle}>
+        {/* <TouchableOpacity onPress={handleLogout} style={styles.buttonStyle}>
           <Text style={styles.buttonText}>Log Out</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
 
         <FlatList
           data={users}

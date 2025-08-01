@@ -1,12 +1,9 @@
-
-
 import React, { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-
 
 import LoginScreen from './screens/LoginScreen';
 import SignupScreen from './screens/SignupScreen';
@@ -17,23 +14,13 @@ import NameScreen from './screens/OnBoarding/NameScreen';
 import BirthdayScreen from './screens/OnBoarding/BirthdayScreen';
 import GenderScreen from './screens/OnBoarding/GenderScreen';
 import HomeScreen from './screens/HomeScreen';
-import UserDetailsScreen from './screens/UserDetailsScreen'
+import UserDetailsScreen from './screens/UserDetailsScreen';
 import PhotoListScreen from './screens/PhotoListScreen';
-import ProductDetails from './screens/ProductDetails'
-import { View, Text } from 'react-native'; // for dummy screen
-
+import ProductDetails from './screens/ProductDetails';
+import SettingScreen from './screens/SettingScreen';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
-
-
-
-const SettingsScreen = () => (
-  <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-    <Text>Settings Screen</Text>
-  </View>
-);
-
 
 const MainTabs = () => (
   <Tab.Navigator
@@ -65,7 +52,7 @@ const MainTabs = () => (
     />
     <Tab.Screen
       name="Settings"
-      component={SettingsScreen}
+      component={SettingScreen}
       options={{
         // eslint-disable-next-line react/no-unstable-nested-components
         tabBarIcon: ({ color, size }) => (
@@ -93,23 +80,26 @@ const App = () => {
   }, []);
 
   if (!initialRoute) {
-        return null;
+    return null;
   }
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName= {initialRoute} screenOptions={{ headerShown:  false}}>
+      <Stack.Navigator
+        initialRouteName={initialRoute}
+        screenOptions={{ headerShown: false }}
+      >
         <Stack.Screen name="Welcome" component={WelcomeScreen} />
         <Stack.Screen name="WalkthroughScreen" component={WalkthroughScreen} />
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="Signup" component={SignupScreen} />
         <Stack.Screen name="UserDetails" component={UserDetailsScreen} />
-        <Stack.Screen name="Name" component={NameScreen}/>
-        <Stack.Screen name="GenderScreen" component={GenderScreen}/>
-        <Stack.Screen name="BirthdayScreen" component={BirthdayScreen}/>
+        <Stack.Screen name="Name" component={NameScreen} />
+        <Stack.Screen name="GenderScreen" component={GenderScreen} />
+        <Stack.Screen name="BirthdayScreen" component={BirthdayScreen} />
         <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
-        <Stack.Screen name='HomeScreen' component={HomeScreen} />
-        <Stack.Screen name='PhotoListScreen' component={PhotoListScreen} />
+        <Stack.Screen name="HomeScreen" component={HomeScreen} />
+        <Stack.Screen name="PhotoListScreen" component={PhotoListScreen} />
         <Stack.Screen name="ProductDetails" component={ProductDetails} />
         <Stack.Screen name="MainTabs" component={MainTabs} />
       </Stack.Navigator>
