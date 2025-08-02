@@ -28,9 +28,9 @@ const HomeScreen = ({ navigation }) => {
     setExpandedIndex(expandedIndex === index ? null : index);
   };
 
-  const handleLogout = () => {
-    navigation.replace('Welcome');
-  };
+  // const handleLogout = () => {
+  //   navigation.replace('Welcome');
+  // };
 
   const handleDeleteUser = async indexToRemove => {
     const storedUsers = await AsyncStorage.getItem('users');
