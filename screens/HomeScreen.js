@@ -85,7 +85,7 @@ const HomeScreen = ({ navigation }) => {
 
   return (
     <SafeAreaProvider>
-      <SafeAreaView>
+      <SafeAreaView style={styles.container} >
         {/* <TouchableOpacity onPress={handleLogout} style={styles.buttonStyle}>
           <Text style={styles.buttonText}>Log Out</Text>
         </TouchableOpacity> */}
@@ -102,6 +102,11 @@ const HomeScreen = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
+
+  container: {
+        flex: 1
+  },
+
   userCard: {
     backgroundColor: '#F1F4FF',
     marginVertical: 10,

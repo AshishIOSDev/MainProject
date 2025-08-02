@@ -10,29 +10,31 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
+import { get } from './services/methods/get';
+import { endpoints } from './services/constants/endpoints';
+
 const App = ({ navigation }) => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
   const [page, setPage] = useState(1);
   const [totalProducts, setTotalProducts] = useState(0);
-  const limit = 10; // Number of products per page
+  const limit = 10;
 
   const fetchProducts = async (currentPage = 1) => {
     try {
-      const response = await fetch(
-        `https://dummyjson.com/products?limit=${limit}&skip=${(currentPage - 1) * limit}`
-      );
-      const json = await response.json();
+      const skip = (currentPage - 1) * limit;
+      const endpoint = endpoints.getPaginatedProducts(limit, skip);
+      const json = await get(endpoint);
+
       setTotalProducts(json.total);
-      
       if (currentPage === 1) {
         setProducts(json.products);
       } else {
-        setProducts(prev => [...prev, ...json.products]);
+        setProducts((prev) => [...prev, ...json.products]);
       }
     } catch (error) {
-      console.error('Error fetching products:', error);
+      console.error('Error fetching products:', error.message);
     } finally {
       setLoading(false);
       setLoadingMore(false);
@@ -45,9 +47,9 @@ const App = ({ navigation }) => {
 
   const loadMoreProducts = () => {
     if (products.length < totalProducts && !loadingMore) {
-      setLoadingMore(true);
       const nextPage = page + 1;
       setPage(nextPage);
+      setLoadingMore(true);
       fetchProducts(nextPage);
     }
   };
@@ -66,15 +68,13 @@ const App = ({ navigation }) => {
     </TouchableOpacity>
   );
 
-  const renderFooter = () => {
-    if (!loadingMore) return null;
-    return (
+  const renderFooter = () =>
+    loadingMore ? (
       <View style={styles.footerLoader}>
         <ActivityIndicator size="small" color="blue" />
         <Text style={styles.loadingText}>Loading more products...</Text>
       </View>
-    );
-  };
+    ) : null;
 
   if (loading && page === 1) {
     return (
@@ -88,7 +88,7 @@ const App = ({ navigation }) => {
     <SafeAreaView style={styles.container}>
       <FlatList
         data={products}
-        keyExtractor={item => item.id.toString()}
+        keyExtractor={(item) => item.id.toString()}
         renderItem={renderItem}
         ListHeaderComponent={
           <View style={styles.header}>
