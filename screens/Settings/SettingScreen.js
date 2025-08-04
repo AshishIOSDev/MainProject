@@ -60,7 +60,7 @@ const App = ({navigation}) => {
   const handleItemPress = (itemName) => {
     switch (itemName) {
       case 'Profile':
-        Alert.alert('Profile Tapped');
+         navigation.navigate('ProfileScreen');
         break;
       case 'Media':
         navigation.navigate('MediaScreen');

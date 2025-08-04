@@ -17,7 +17,7 @@ const ForgotPasswordScreen = ({ navigation }) => {
   const [generatedOtp, setGeneratedOtp] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [step, setStep] = useState('email'); // 'email' | 'otp' | 'password'
+  const [step, setStep] = useState('email');
 
   const checkEmailExists = async () => {
     if (!email) {

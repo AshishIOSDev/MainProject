@@ -1,4 +1,4 @@
-import React from 'react';
+import React , { useState } from 'react';
 import {
   Button,
   Image,
@@ -12,7 +12,7 @@ import Video from 'react-native-video';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const MediaScreen = ({navigation}) => {
-  const [media, setMedia] = React.useState(null);
+  const [media, setMedia] = useState(null);
 
   const pickMedia = () => {
     launchImageLibrary(

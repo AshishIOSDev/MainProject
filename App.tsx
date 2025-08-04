@@ -5,10 +5,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-import LoginScreen from './screens/LoginScreen';
-import SignupScreen from './screens/SignupScreen';
-import ForgotPasswordScreen from './screens/ForgotPasswordScreen';
-import WelcomeScreen from './screens/WelcomeScreen';
+import LoginScreen from './screens/LoginAndSignUp/LoginScreen';
+import SignupScreen from './screens/LoginAndSignUp/SignupScreen';
+import ForgotPasswordScreen from './screens/LoginAndSignUp/ForgotPasswordScreen';
+import WelcomeScreen from './screens/LoginAndSignUp/WelcomeScreen';
 import WalkthroughScreen from './screens/Walkthrough/WalkthroughScreen';
 import NameScreen from './screens/OnBoarding/NameScreen';
 import BirthdayScreen from './screens/OnBoarding/BirthdayScreen';
@@ -17,8 +17,9 @@ import HomeScreen from './screens/HomeScreen';
 import UserDetailsScreen from './screens/UserDetailsScreen';
 import PhotoListScreen from './screens/PhotoListScreen';
 import ProductDetails from './screens/ProductDetails';
-import SettingScreen from './screens/SettingScreen';
-import MediaScreen from './screens/MediaScreen';
+import SettingScreen from './screens/Settings/SettingScreen';
+import MediaScreen from './screens/Settings/MediaScreen';
+import ProfileScreen from './screens/Settings/ProfileScreen';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -103,6 +104,7 @@ const App = () => {
         <Stack.Screen name="PhotoListScreen" component={PhotoListScreen} />
         <Stack.Screen name="ProductDetails" component={ProductDetails} />
         <Stack.Screen name="MediaScreen" component={MediaScreen} />
+        <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
         <Stack.Screen name="MainTabs" component={MainTabs} />
       </Stack.Navigator>
     </NavigationContainer>
