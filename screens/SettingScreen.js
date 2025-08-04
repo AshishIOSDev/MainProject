@@ -63,7 +63,7 @@ const App = ({navigation}) => {
         Alert.alert('Profile Tapped');
         break;
       case 'Media':
-        Alert.alert('Media Tapped');
+        navigation.navigate('MediaScreen');
         break;
       case 'Friend List':
         Alert.alert('Friend List Tapped');

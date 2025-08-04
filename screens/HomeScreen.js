@@ -172,6 +172,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     padding: 10,
     backgroundColor: 'red',
+    
     borderRadius: 8,
     alignItems: 'center',
   },

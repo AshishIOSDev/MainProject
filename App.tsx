@@ -18,6 +18,7 @@ import UserDetailsScreen from './screens/UserDetailsScreen';
 import PhotoListScreen from './screens/PhotoListScreen';
 import ProductDetails from './screens/ProductDetails';
 import SettingScreen from './screens/SettingScreen';
+import MediaScreen from './screens/MediaScreen';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -101,6 +102,7 @@ const App = () => {
         <Stack.Screen name="HomeScreen" component={HomeScreen} />
         <Stack.Screen name="PhotoListScreen" component={PhotoListScreen} />
         <Stack.Screen name="ProductDetails" component={ProductDetails} />
+        <Stack.Screen name="MediaScreen" component={MediaScreen} />
         <Stack.Screen name="MainTabs" component={MainTabs} />
       </Stack.Navigator>
     </NavigationContainer>
