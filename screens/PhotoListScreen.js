@@ -6,10 +6,11 @@ import {
   Image,
   ActivityIndicator,
   StyleSheet,
-  SafeAreaView,
+  
   TouchableOpacity,
+  ImageBackground,
 } from 'react-native';
-
+import { SafeAreaProvider , SafeAreaView} from 'react-native-safe-area-context';
 import { get } from './services/methods/get';
 import { endpoints } from './services/constants/endpoints';
 
@@ -57,21 +58,23 @@ const App = ({ navigation }) => {
   const renderItem = ({ item }) => (
     <TouchableOpacity
       onPress={() => navigation.navigate('ProductDetails', { product: item })}
+      activeOpacity={0.7}
     >
-      <View style={styles.productCard}>
-        <Image source={{ uri: item.thumbnail }} style={styles.image} />
-        <View style={styles.textContainer}>
-          <Text style={styles.title}>{item.title}</Text>
-          <Text style={styles.price}>$ {item.price}</Text>
+        <View style={styles.androidCard}>
+          <Image source={{ uri: item.thumbnail }} style={styles.image} />
+          <View style={styles.textContainer}>
+            <Text style={styles.title}>{item.title}</Text>
+            <Text style={styles.price}>$ {item.price}</Text>
+          </View>
         </View>
-      </View>
+      
     </TouchableOpacity>
   );
 
   const renderFooter = () =>
     loadingMore ? (
       <View style={styles.footerLoader}>
-        <ActivityIndicator size="small" color="blue" />
+        <ActivityIndicator size="small" color="white" />
         <Text style={styles.loadingText}>Loading more products...</Text>
       </View>
     ) : null;
@@ -85,54 +88,88 @@ const App = ({ navigation }) => {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
-      <FlatList
-        data={products}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={renderItem}
-        ListHeaderComponent={
-          <View style={styles.header}>
-            <Text style={styles.headerText}>Products</Text>
-          </View>
-        }
-        ListFooterComponent={renderFooter}
-        onEndReached={loadMoreProducts}
-        onEndReachedThreshold={0.5}
-        contentContainerStyle={styles.listContent}
-      />
-    </SafeAreaView>
+    <SafeAreaProvider>
+      <ImageBackground
+        source={{
+          uri: 'https://w0.peakpx.com/wallpaper/479/900/HD-wallpaper-gradient-purple-blue-gradient-thumbnail.jpg',
+        }}
+        style={styles.backgroundImage}
+        resizeMode="cover"
+      >
+        <SafeAreaView style={styles.container}>
+            <View style={styles.androidHeader}>
+              <Text style={styles.headerText}>Products</Text>
+            </View>
+          <FlatList
+            data={products}
+            keyExtractor={item => item.id.toString()}
+            renderItem={renderItem}
+            ListFooterComponent={renderFooter}
+            onEndReached={loadMoreProducts}
+            onEndReachedThreshold={0.5}
+            contentContainerStyle={styles.listContent}
+            style={styles.flatList}
+          />
+        </SafeAreaView>
+      </ImageBackground>
+    </SafeAreaProvider>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F1F4FF',
   },
-  header: {
+  backgroundImage: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
+  },
+  flatList: {
+    backgroundColor: 'rgba(0,0,0,0.2)',
+  },
+  iosHeader: {
     padding: 16,
-    backgroundColor: '#F1F4FF',
-    borderBottomWidth: 1,
-    borderBottomColor: '#F1F4FF',
+    marginBottom: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  androidHeader: {
+    marginBottom: 10,
+    backgroundColor: 'rgba(0,0,0,0.3)',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   headerText: {
     fontSize: 30,
     fontWeight: 'bold',
     textAlign: 'center',
-    color: '#1F41BB',
+    color: 'white',
+    textShadowColor: 'rgba(0, 0, 0, 0.5)',
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 3,
   },
-  productCard: {
-    flex: 1,
-    padding: 12,
-    backgroundColor: '#F1F4FF',
+  iosCardContainer: {
     marginVertical: 10,
     marginHorizontal: 15,
-    borderRadius: 10,
+    borderRadius: 15,
+    overflow: 'hidden',
+    borderWidth: 0.5,
+    borderColor: 'rgba(255,255,255,0.3)',
+  },
+  iosBlurView: {
+    padding: 12,
     alignItems: 'center',
-    elevation: 3,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.3,
-    shadowColor: 'midnightblue',
+  },
+  androidCard: {
+    padding: 12,
+    marginVertical: 10,
+    marginHorizontal: 15,
+    borderRadius: 15,
+    alignItems: 'center',
+    backgroundColor: 'rgba(255,255,255,0.15)',
+    borderWidth: 0.5,
+    borderColor: 'rgba(255,255,255,0.3)',
   },
   image: {
     width: 230,
@@ -148,20 +185,27 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#1F41BB',
+    color: 'white',
     textAlign: 'left',
+    textShadowColor: 'rgba(0, 0, 0, 0.5)',
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 2,
   },
   price: {
     fontSize: 16,
-    color: 'green',
+    color: '#4CAF50',
     marginVertical: 4,
     textAlign: 'left',
+    fontWeight: '600',
+    textShadowColor: 'rgba(0, 0, 0, 0.3)',
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 1,
   },
   loader: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F1F4FF',
+    backgroundColor: 'transparent',
   },
   footerLoader: {
     padding: 10,
@@ -171,7 +215,10 @@ const styles = StyleSheet.create({
   },
   loadingText: {
     marginLeft: 10,
-    color: '#1F41BB',
+    color: 'white',
+    textShadowColor: 'rgba(0, 0, 0, 0.5)',
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 2,
   },
   listContent: {
     paddingBottom: 20,

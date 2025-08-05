@@ -6,6 +6,7 @@ import {
   StyleSheet,
   Alert,
   FlatList,
+  ImageBackground,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
@@ -27,11 +28,7 @@ const HomeScreen = ({ navigation }) => {
   const toggleExpand = index => {
     setExpandedIndex(expandedIndex === index ? null : index);
   };
-
-  // const handleLogout = () => {
-  //   navigation.replace('Welcome');
-  // };
-
+  
   const handleDeleteUser = async indexToRemove => {
     const storedUsers = await AsyncStorage.getItem('users');
     let updated = storedUsers ? JSON.parse(storedUsers) : [];
@@ -64,10 +61,7 @@ const HomeScreen = ({ navigation }) => {
             onPress={() =>
               navigation.navigate('UserDetails', { user: item, index })
             }
-            style={[
-              styles.deleteButton,
-              { backgroundColor: '#1F41BB' },
-            ]}
+            style={[styles.deleteButton, { backgroundColor: '#1F41BB' }]}
           >
             <Text style={styles.deleteText}>Edit User</Text>
           </TouchableOpacity>
@@ -85,28 +79,34 @@ const HomeScreen = ({ navigation }) => {
 
   return (
     <SafeAreaProvider>
-      <SafeAreaView style={styles.container} >
-        {/* <TouchableOpacity onPress={handleLogout} style={styles.buttonStyle}>
-          <Text style={styles.buttonText}>Log Out</Text>
-        </TouchableOpacity> */}
-
-        <FlatList
-          data={users}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={renderItem}
-          // contentContainerStyle={{ paddingBottom: 100 }}
-        />
-      </SafeAreaView>
+      <ImageBackground
+        source={{
+          uri: 'https://w0.peakpx.com/wallpaper/479/900/HD-wallpaper-gradient-purple-blue-gradient-thumbnail.jpg',
+        }}
+        style={styles.backgroundImage}
+        resizeMode="cover"
+      >
+        <SafeAreaView style={styles.container}>
+          <FlatList
+            data={users}
+            keyExtractor={(item, index) => index.toString()}
+            renderItem={renderItem}
+          />
+        </SafeAreaView>
+      </ImageBackground>
     </SafeAreaProvider>
   );
 };
 
 const styles = StyleSheet.create({
-
   container: {
-        flex: 1
+    flex: 1,
   },
-
+    backgroundImage: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
+  },
   userCard: {
     backgroundColor: '#F1F4FF',
     marginVertical: 10,
@@ -172,7 +172,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     padding: 10,
     backgroundColor: 'red',
-    
+
     borderRadius: 8,
     alignItems: 'center',
   },

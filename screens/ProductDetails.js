@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity, Platform, StatusBar } from 'react-native';
+import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity, ImageBackground } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -8,13 +8,20 @@ const ProductDetails = ({ route, navigation }) => {
 
   return (
     <SafeAreaProvider>
+      <ImageBackground
+              source={{
+                uri: 'https://w0.peakpx.com/wallpaper/479/900/HD-wallpaper-gradient-purple-blue-gradient-thumbnail.jpg',
+              }}
+              style={styles.backgroundImage}
+              resizeMode="cover"
+       >
       <SafeAreaView style={styles.safeArea} edges={['top']}>
         <View style={styles.header}>
           <TouchableOpacity
             style={styles.backButton}
             onPress={() => navigation.goBack()}
           >
-            <Icon name="arrow-left" size={25} color="#1F41BB" />
+            <Icon name="arrow-left" size={25} color="white" />
           </TouchableOpacity>
         </View>
         <ScrollView contentContainerStyle={styles.container}>
@@ -28,6 +35,7 @@ const ProductDetails = ({ route, navigation }) => {
           <Text style={styles.description}>{product.description}</Text>
         </ScrollView>
       </SafeAreaView>
+      </ImageBackground>
     </SafeAreaProvider>
   );
 };
@@ -37,6 +45,11 @@ const styles = StyleSheet.create({
     padding: 20,
     alignItems: 'center',
     paddingTop: 0,
+  },
+    backgroundImage: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
   },
   image: {
     width: 300,
@@ -51,24 +64,29 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     marginVertical: 10,
-    color: 'black',
+    color: 'white',
     textAlign: 'left',
   },
-  price: {
-    fontSize: 20,
-    color: 'green',
-    marginBottom: 10,
+price: {
+    fontSize: 16,
+    color: '#4CAF50',
+    marginVertical: 4,
+    textAlign: 'left',
+    fontWeight: '600',
+    textShadowColor: 'rgba(0, 0, 0, 0.3)',
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 1,
   },
   description: {
     fontSize: 16,
     textAlign: 'left',
     marginBottom: 10,
-    color: '#555',
+    color: 'white',
   },
   label: {
     textAlign: 'left',
     fontSize: 14,
-    color: '#333',
+    color: 'white',
     marginBottom: 4,
   },
 });

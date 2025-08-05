@@ -55,6 +55,24 @@ const Item = ({ name, icon, iconColor = '#555', onPress }) => (
   </TouchableOpacity>
 );
 
+const showPopup = ({navigation}) => {
+    Alert.alert(
+      "Confirmation",
+      "Are you sure you want to proceed?",
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel"
+        },
+        { 
+          text: "OK", 
+          onPress: () => navigation.replace('Welcome')
+        }
+      ],
+      { cancelable: false }
+    );
+  };
 const App = ({navigation}) => {
   
   const handleItemPress = (itemName) => {
@@ -69,8 +87,8 @@ const App = ({navigation}) => {
         Alert.alert('Friend List Tapped');
         break;
       case 'Log Out':
-        Alert.alert('Log Out Tapped');
         navigation.replace('Welcome');
+        showPopup
         break;
       case 'Delete Account':
         Alert.alert('Delete Account Tapped');
