@@ -32,16 +32,16 @@ const ProfileScreen = ({ navigation }) => {
   return (
     <SafeAreaProvider>
       <ImageBackground 
-        source={{uri: 'https://w0.peakpx.com/wallpaper/479/900/HD-wallpaper-gradient-purple-blue-gradient-thumbnail.jpg'}} 
+        // source={{uri: 'https://w0.peakpx.com/wallpaper/479/900/HD-wallpaper-gradient-purple-blue-gradient-thumbnail.jpg'}}
+        source={{uri: 'https://i.pinimg.com/236x/65/2e/71/652e71da97da6c7364a6dad06a341fbb.jpg'}} 
         style={styles.backgroundImage}
-        resizeMode="cover"
       >
         <SafeAreaView style={styles.safeArea}>
           <TouchableOpacity
             style={styles.backButton}
             onPress={() => navigation.goBack('Signup')}
           >
-            <Icon name="arrow-left" size={25} color="#1F41BB" />
+            <Icon name="arrow-left" size={25} color="white" />
           </TouchableOpacity>
           <View style={styles.container}>
             <View style={styles.imageContainer}>
@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
   },
   safeArea: {
     flex: 1,
-    backgroundColor: 'rgba(255, 255, 255, 0.7)', // Optional: adds a semi-transparent overlay
+    backgroundColor: 'rgba(255, 255, 255, 0.31)', 
   },
   container: {
     padding: 20,
@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
     borderRadius: 60,
     borderColor: 'gray',
     marginBottom: 20,
-    backgroundColor: 'rgba(255, 255, 255, 0.7)', // Optional: makes the profile picture area more visible
+    backgroundColor: 'rgba(255, 255, 255, 0.7)', 
     justifyContent: 'center',
     alignItems: 'center',
   },

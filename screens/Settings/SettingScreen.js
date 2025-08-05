@@ -6,6 +6,7 @@ import {
   SectionList,
   TouchableOpacity,
   Alert,
+  ImageBackground,
 } from 'react-native';
 import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -14,25 +15,25 @@ const DATA = [
   {
     title: 'SETTINGS',
     data: [
-      { name: 'Profile', icon: 'account', iconColor: '#1F41BB' },
-      { name: 'Media', icon: 'image', iconColor: '#1F41BB' },
-      { name: 'Friend List', icon: 'account-group', iconColor: '#1F41BB' },
+      { name: 'Profile', icon: 'account', iconColor: 'white' },
+      { name: 'Media', icon: 'image', iconColor: 'white' },
+      { name: 'Friend List', icon: 'account-group', iconColor: 'white' },
     ],
   },
   {
     title: 'SUBSCRIPTIONS',
     data: [
-      { name: 'Your Purchases', icon: 'cart', iconColor: '#1F41BB' },
-      { name: 'Payment Methods', icon: 'credit-card', iconColor: '#1F41BB' },
-      { name: 'Active Plans', icon: 'calendar-check', iconColor: '#1F41BB' },
+      { name: 'Your Purchases', icon: 'cart', iconColor: 'white' },
+      { name: 'Payment Methods', icon: 'credit-card', iconColor: 'white' },
+      { name: 'Active Plans', icon: 'calendar-check', iconColor: 'white' },
     ],
   },
   {
     title: 'HELP & SUPPORT',
     data: [
-      { name: 'FAQ', icon: 'help-circle', iconColor: '#1F41BB' },
-      { name: 'Forums', icon: 'forum', iconColor: '#1F41BB' },
-      { name: 'Contact Us', icon: 'headset', iconColor: '#1F41BB' },
+      { name: 'FAQ', icon: 'help-circle', iconColor: 'white' },
+      { name: 'Forums', icon: 'forum', iconColor: 'white' },
+      { name: 'Contact Us', icon: 'headset', iconColor: 'white' },
     ],
   },
   {
@@ -51,7 +52,7 @@ const Item = ({ name, icon, iconColor = '#555', onPress }) => (
       <MaterialCommunityIcons name={icon} size={24} color={iconColor} style={styles.icon} />
       <Text style={styles.title}>{name}</Text>
     </View>
-    <MaterialCommunityIcons name="chevron-right" size={24} color="#aaa" />
+    <MaterialCommunityIcons name="chevron-right" size={24} color="white" />
   </TouchableOpacity>
 );
 
@@ -100,6 +101,11 @@ const App = ({navigation}) => {
 
   return (
     <SafeAreaProvider>
+            <ImageBackground 
+              // source={{uri: 'https://w0.peakpx.com/wallpaper/479/900/HD-wallpaper-gradient-purple-blue-gradient-thumbnail.jpg'}}
+              source={{uri: 'https://i.pinimg.com/236x/65/2e/71/652e71da97da6c7364a6dad06a341fbb.jpg'}} 
+              style={styles.backgroundImage}
+            >
       <SafeAreaView style={styles.container}>
         <Text style={styles.screenTitle}>Settings</Text>
         <SectionList
@@ -122,6 +128,7 @@ const App = ({navigation}) => {
           showsVerticalScrollIndicator={false}
         />
       </SafeAreaView>
+      </ImageBackground>
     </SafeAreaProvider>
   );
 };
@@ -129,26 +136,31 @@ const App = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    // backgroundColor: '#f5f5f5',
+  },
+    backgroundImage: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
   },
   screenTitle: {
     fontSize: 30,
     fontWeight: '600',
-    color: '#1F41BB',
+    color: 'white',
     padding: 24,
     paddingBottom: 16,
   },
   sectionHeader: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#1F41BB',
+    color: '#f5b20bff',
     marginTop: 24,
     marginBottom: 8,
     paddingHorizontal: 24,
     letterSpacing: 0.8,
   },
   item: {
-    backgroundColor: '#fff',
+    // backgroundColor: '#fff',
     paddingVertical: 16,
     paddingHorizontal: 24,
     flexDirection: 'row',
@@ -164,16 +176,16 @@ const styles = StyleSheet.create({
     width: 24,
   },
   title: {
-    fontSize: 16,
-    color: '#333',
+    fontSize: 19,
+    color: 'white',
+    fontWeight: 'bold',
   },
   separator: {
-    height: 1,
-    backgroundColor: '#eee',
-    marginLeft: 64,
+    height: 0.3,
+    backgroundColor: 'gray',
   },
   sectionSeparator: {
-    height: 8,
+    height: 1,
   },
 });
 

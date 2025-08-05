@@ -28,9 +28,26 @@ const Tab = createBottomTabNavigator();
 const MainTabs = () => (
   <Tab.Navigator
     screenOptions={{
-      tabBarActiveTintColor: '#1F41BB',
-      tabBarLabelStyle: { fontWeight: 'bold' },
+      tabBarActiveTintColor: '#f5b20bff',
+      tabBarInactiveTintColor: 'white',
+      tabBarLabelStyle: { 
+        fontWeight: 'bold',
+        paddingBottom: 5, 
+        marginTop: 2,  
+        // color: 'white',
+      },
+      tabBarIconStyle: {
+        marginTop: 2,     
+      },
       headerShown: false,
+      tabBarStyle: {
+        // backgroundColor: '#5b200266',
+        backgroundColor: '#f5380d80',
+        borderTopWidth: 0.3,
+        elevation: 16, 
+        shadowOpacity: 16,
+        height: 65,   
+      },
     }}
   >
     <Tab.Screen
@@ -41,6 +58,7 @@ const MainTabs = () => (
         tabBarIcon: ({ color, size }) => (
           <Icon name="home" color={color} size={size} />
         ),
+        tabBarLabel: 'Home',
       }}
     />
     <Tab.Screen
@@ -51,6 +69,7 @@ const MainTabs = () => (
         tabBarIcon: ({ color, size }) => (
           <Icon name="animation" color={color} size={size} />
         ),
+        tabBarLabel: 'Product',
       }}
     />
     <Tab.Screen
@@ -61,6 +80,7 @@ const MainTabs = () => (
         tabBarIcon: ({ color, size }) => (
           <Icon name="cog" color={color} size={size} />
         ),
+        tabBarLabel: 'Settings',
       }}
     />
   </Tab.Navigator>

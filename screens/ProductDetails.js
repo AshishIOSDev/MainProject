@@ -9,9 +9,10 @@ const ProductDetails = ({ route, navigation }) => {
   return (
     <SafeAreaProvider>
       <ImageBackground
-              source={{
-                uri: 'https://w0.peakpx.com/wallpaper/479/900/HD-wallpaper-gradient-purple-blue-gradient-thumbnail.jpg',
-              }}
+              // source={{
+              //   uri: 'https://w0.peakpx.com/wallpaper/479/900/HD-wallpaper-gradient-purple-blue-gradient-thumbnail.jpg',
+              // }}
+              source={{uri: 'https://i.pinimg.com/236x/65/2e/71/652e71da97da6c7364a6dad06a341fbb.jpg'}} 
               style={styles.backgroundImage}
               resizeMode="cover"
        >

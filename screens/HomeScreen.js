@@ -80,9 +80,10 @@ const HomeScreen = ({ navigation }) => {
   return (
     <SafeAreaProvider>
       <ImageBackground
-        source={{
-          uri: 'https://w0.peakpx.com/wallpaper/479/900/HD-wallpaper-gradient-purple-blue-gradient-thumbnail.jpg',
-        }}
+        // source={{
+        //   uri: 'https://w0.peakpx.com/wallpaper/479/900/HD-wallpaper-gradient-purple-blue-gradient-thumbnail.jpg',
+        // }}
+        source={{uri: 'https://i.pinimg.com/236x/65/2e/71/652e71da97da6c7364a6dad06a341fbb.jpg'}} 
         style={styles.backgroundImage}
         resizeMode="cover"
       >
@@ -108,7 +109,7 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   userCard: {
-    backgroundColor: '#F1F4FF',
+    backgroundColor: '#f1f4ff1f',
     marginVertical: 10,
     marginHorizontal: 15,
     padding: 15,
@@ -124,12 +125,12 @@ const styles = StyleSheet.create({
   userName: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#1F41BB',
+    color: 'white',
   },
 
   userEmail: {
     fontSize: 17,
-    color: '#555',
+    color: '#f5b20bff',
     fontWeight: 'bold',
     marginBottom: 10,
   },
@@ -143,7 +144,7 @@ const styles = StyleSheet.create({
 
   userDetail: {
     fontSize: 15,
-    color: 'black',
+    color: 'white',
     marginBottom: 5,
   },
 
