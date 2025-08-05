@@ -1,64 +1,123 @@
 import React, { useState } from 'react';
-import { TouchableOpacity, View, StyleSheet, Image, Text, ImageBackground } from 'react-native';
+import {
+  TouchableOpacity,
+  View,
+  StyleSheet,
+  Image,
+  Text,
+  ImageBackground,
+  FlatList,
+  StatusBar,
+} from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { launchImageLibrary } from 'react-native-image-picker';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import LinearGradient from 'react-native-linear-gradient';
 
-// You'll need to import or require your background image
-
 const ProfileScreen = ({ navigation }) => {
-  const [image, setImage] = useState(null);
+  const [profileImage, setProfileImage] = useState(null);
 
-  const OpenImagePicker = () => {
+
+  const PROFILE_DATA = [
+    { id: '1', title: 'Phone Number' },
+    { id: '2', title: 'Address' },
+    { id: '3', title: 'Email' },
+  ];
+
+
+  const handleImagePicker = () => {
     launchImageLibrary(
       {
-        mediaType: 'mixed',
+        mediaType: 'photo',
         selectionLimit: 1,
+        quality: 0.8,
       },
-      response => {
+      (response) => {
         if (response.didCancel) {
-          console.log('User cancelled picker');
+          console.log('Profile picture selection cancelled');
         } else if (response.errorCode) {
-          console.log('Error:', response.errorMessage);
-        } else {
-          const asset = response.assets[0];
-          setImage(asset);
+          console.error('ImagePicker Error:', response.errorMessage);
+        } else if (response.assets && response.assets.length > 0) {
+          const selectedImage = response.assets[0];
+          setProfileImage(selectedImage);
         }
-      },
+      }
     );
   };
 
+
+  const ProfileItem = ({ title }) => (
+    <View style={styles.profileItem}>
+      <Text style={styles.profileItemText}>{title}</Text>
+      <Icon name="chevron-right" size={24} color="#666" />
+    </View>
+  );
+
   return (
     <SafeAreaProvider>
-      <ImageBackground 
-        // source={{uri: 'https://w0.peakpx.com/wallpaper/479/900/HD-wallpaper-gradient-purple-blue-gradient-thumbnail.jpg'}}
-        source={{uri: 'https://i.pinimg.com/236x/65/2e/71/652e71da97da6c7364a6dad06a341fbb.jpg'}} 
+      <StatusBar barStyle="light-content" />
+      <ImageBackground
+        source={{
+          uri: 'https://i.pinimg.com/236x/65/2e/71/652e71da97da6c7364a6dad06a341fbb.jpg',
+        }}
         style={styles.backgroundImage}
+        blurRadius={2}
       >
-        <SafeAreaView style={styles.safeArea}>
-          <TouchableOpacity
-            style={styles.backButton}
-            onPress={() => navigation.goBack('Signup')}
-          >
-            <Icon name="arrow-left" size={25} color="white" />
-          </TouchableOpacity>
-          <View style={styles.container}>
-            <View style={styles.imageContainer}>
-              {image && image.type?.startsWith('image') ? (
-                <Image source={{ uri: image.uri }} style={styles.image} />
+        <SafeAreaView style={styles.safeAreaContainer}>
+
+          <View style={styles.headerContainer}>
+            <TouchableOpacity
+              onPress={() => navigation.goBack()}
+              style={styles.backButton}
+            >
+              <Icon name="arrow-left" size={25} color="white" />
+            </TouchableOpacity>
+            <Text style={styles.screenTitle}>My Profile</Text>
+            <View style={styles.headerSpacer} />
+          </View>
+
+
+          <View style={styles.contentContainer}>
+  
+            <View style={styles.profilePictureContainer}>
+              {profileImage ? (
+                <Image 
+                  source={{ uri: profileImage.uri }} 
+                  style={styles.profileImage} 
+                />
               ) : (
-                <Icon name="account-circle-outline" size={120} color="#ccc" />
+                <Icon 
+                  name="account-circle-outline" 
+                  size={120} 
+                  color="rgba(255,255,255,0.7)" 
+                />
               )}
             </View>
-            <TouchableOpacity onPress={OpenImagePicker}>
+
+            <TouchableOpacity 
+              onPress={handleImagePicker}
+              activeOpacity={0.7}
+            >
               <LinearGradient
-                colors={['#1F41BB', 'black']}
-                style={styles.gradientButton}
+                colors={['#1F41BB', '#0D2E8A']}
+                style={styles.changePictureButton}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 0 }}
               >
                 <Text style={styles.buttonText}>Change Profile Picture</Text>
+                <Icon name="camera" size={18} color="white" style={styles.buttonIcon} />
               </LinearGradient>
             </TouchableOpacity>
+
+            {/* Profile Information List */}
+            <View style={styles.profileListContainer}>
+              <FlatList
+                data={PROFILE_DATA}
+                renderItem={({ item }) => <ProfileItem title={item.title} />}
+                keyExtractor={item => item.id}
+                scrollEnabled={false}
+              />
+            </View>
           </View>
         </SafeAreaView>
       </ImageBackground>
@@ -69,54 +128,91 @@ const ProfileScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   backgroundImage: {
     flex: 1,
-    width: '100%',
-    height: '100%',
+    resizeMode: 'cover',
   },
-  safeArea: {
+  safeAreaContainer: {
     flex: 1,
-    backgroundColor: 'rgba(255, 255, 255, 0.31)', 
+    backgroundColor: 'rgba(0, 0, 0, 0.4)',
   },
-  container: {
-    padding: 20,
-    paddingTop: 0,
+  contentContainer: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  imageContainer: {
-    height: 120,
-    width: 120,
-    borderRadius: 60,
-    borderColor: 'gray',
-    marginBottom: 20,
-    backgroundColor: 'rgba(255, 255, 255, 0.7)', 
-    justifyContent: 'center',
+    padding: 24,
     alignItems: 'center',
   },
-  image: {
-    height: 120,
-    width: 120,
-    borderRadius: 60,
+
+  headerContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 16,
+    paddingVertical: 12,
   },
   backButton: {
-    width: 30,
-    height: 20,
-    marginLeft: 10,
-    marginTop: 10,
-    color: '#1F41BB',
+    padding: 8,
   },
-  gradientButton: {
-    height: 40,
-    width: 180,
+  screenTitle: {
+    color: 'white',
+    fontSize: 20,
+    fontWeight: '600',
+  },
+  headerSpacer: {
+    width: 25,
+  },
+
+  profilePictureContainer: {
+    height: 140,
+    width: 140,
+    borderRadius: 70,
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    marginBottom: 20,
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 10,
-    marginTop: 20,
+    borderWidth: 2,
+    borderColor: 'rgba(255,255,255,0.3)',
+  },
+  profileImage: {
+    height: '100%',
+    width: '100%',
+    borderRadius: 70,
+  },
+
+  changePictureButton: {
+    height: 44,
+    width: 350,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 22,
+    marginVertical: 16,
+    paddingHorizontal: 20,
+    elevation: 3,
   },
   buttonText: {
     color: 'white',
     fontWeight: '600',
+    fontSize: 16,
+    marginRight: 8,
+  },
+  buttonIcon: {
+    marginLeft: 4,
+  },
+  profileListContainer: {
+    width: '100%',
+    marginTop: 32,
+  },
+  profileItem: {
+    backgroundColor: 'rgba(255, 255, 255, 0.15)',
+    padding: 18,
+    marginVertical: 8,
+    borderRadius: 12,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
+  },
+  profileItemText: {
+    fontSize: 18,
+    color: 'white',
+    fontWeight: '500',
   },
 });
 
