@@ -6,7 +6,6 @@ import {
   Image,
   ActivityIndicator,
   StyleSheet,
-  
   TouchableOpacity,
   ImageBackground,
 } from 'react-native';

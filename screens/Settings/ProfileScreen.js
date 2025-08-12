@@ -109,7 +109,7 @@ const ProfileScreen = ({ navigation }) => {
               </LinearGradient>
             </TouchableOpacity>
 
-            {/* Profile Information List */}
+
             <View style={styles.profileListContainer}>
               <FlatList
                 data={PROFILE_DATA}
@@ -184,8 +184,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 22,
     marginVertical: 16,
-    paddingHorizontal: 20,
-    elevation: 3,
   },
   buttonText: {
     color: 'white',
