@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import {
   TouchableOpacity,
   View,
@@ -13,10 +13,13 @@ import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { launchImageLibrary } from 'react-native-image-picker';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import LinearGradient from 'react-native-linear-gradient';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useDispatch, useSelector } from 'react-redux';
+import { setProfilePicture } from '../store/profileSlice';
 
 const ProfileScreen = ({ navigation }) => {
-  const [profileImage, setProfileImage] = useState(null);
-
+  const dispatch = useDispatch();
+  const profileImage = useSelector(state => state.profile.profilePicture);
 
   const PROFILE_DATA = [
     { id: '1', title: 'Phone Number' },
@@ -24,6 +27,14 @@ const ProfileScreen = ({ navigation }) => {
     { id: '3', title: 'Email' },
   ];
 
+  useEffect(() => {
+    (async () => {
+      const savedImage = await AsyncStorage.getItem('appProfilePicture');
+      if (savedImage) {
+        dispatch(setProfilePicture(savedImage));
+      }
+    })();
+  }, [dispatch]);
 
   const handleImagePicker = () => {
     launchImageLibrary(
@@ -32,19 +43,15 @@ const ProfileScreen = ({ navigation }) => {
         selectionLimit: 1,
         quality: 0.8,
       },
-      (response) => {
-        if (response.didCancel) {
-          console.log('Profile picture selection cancelled');
-        } else if (response.errorCode) {
-          console.error('ImagePicker Error:', response.errorMessage);
-        } else if (response.assets && response.assets.length > 0) {
-          const selectedImage = response.assets[0];
-          setProfileImage(selectedImage);
+      async response => {
+        if (response.assets && response.assets.length > 0) {
+          const uri = response.assets[0].uri;
+          dispatch(setProfilePicture(uri));
+          await AsyncStorage.setItem('appProfilePicture', uri);
         }
-      }
+      },
     );
   };
-
 
   const ProfileItem = ({ title }) => (
     <View style={styles.profileItem}>
@@ -58,13 +65,12 @@ const ProfileScreen = ({ navigation }) => {
       <StatusBar barStyle="light-content" />
       <ImageBackground
         source={{
-          uri: 'https://i.pinimg.com/236x/65/2e/71/652e71da97da6c7364a6dad06a341fbb.jpg',
+          uri: 'https://e1.pxfuel.com/desktop-wallpaper/445/615/desktop-wallpaper-papers-co-iphone-blur.jpg',
         }}
         style={styles.backgroundImage}
         blurRadius={2}
       >
         <SafeAreaView style={styles.safeAreaContainer}>
-
           <View style={styles.headerContainer}>
             <TouchableOpacity
               onPress={() => navigation.goBack()}
@@ -76,28 +82,23 @@ const ProfileScreen = ({ navigation }) => {
             <View style={styles.headerSpacer} />
           </View>
 
-
           <View style={styles.contentContainer}>
-  
             <View style={styles.profilePictureContainer}>
               {profileImage ? (
-                <Image 
-                  source={{ uri: profileImage.uri }} 
-                  style={styles.profileImage} 
+                <Image
+                  source={{ uri: profileImage }}
+                  style={styles.profileImage}
                 />
               ) : (
-                <Icon 
-                  name="account-circle-outline" 
-                  size={120} 
-                  color="rgba(255,255,255,0.7)" 
+                <Icon
+                  name="account-circle-outline"
+                  size={120}
+                  color="rgba(255,255,255,0.7)"
                 />
               )}
             </View>
 
-            <TouchableOpacity 
-              onPress={handleImagePicker}
-              activeOpacity={0.7}
-            >
+            <TouchableOpacity onPress={handleImagePicker} activeOpacity={0.7}>
               <LinearGradient
                 colors={['#1F41BB', '#0D2E8A']}
                 style={styles.changePictureButton}
@@ -105,10 +106,14 @@ const ProfileScreen = ({ navigation }) => {
                 end={{ x: 1, y: 0 }}
               >
                 <Text style={styles.buttonText}>Change Profile Picture</Text>
-                <Icon name="camera" size={18} color="white" style={styles.buttonIcon} />
+                <Icon
+                  name="camera"
+                  size={18}
+                  color="white"
+                  style={styles.buttonIcon}
+                />
               </LinearGradient>
             </TouchableOpacity>
-
 
             <View style={styles.profileListContainer}>
               <FlatList
@@ -126,20 +131,9 @@ const ProfileScreen = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  backgroundImage: {
-    flex: 1,
-    resizeMode: 'cover',
-  },
-  safeAreaContainer: {
-    flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.4)',
-  },
-  contentContainer: {
-    flex: 1,
-    padding: 24,
-    alignItems: 'center',
-  },
-
+  backgroundImage: { flex: 1, resizeMode: 'cover' },
+  safeAreaContainer: { flex: 1, backgroundColor: 'rgba(0, 0, 0, 0.4)' },
+  contentContainer: { flex: 1, padding: 24, alignItems: 'center' },
   headerContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -147,18 +141,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 12,
   },
-  backButton: {
-    padding: 8,
-  },
-  screenTitle: {
-    color: 'white',
-    fontSize: 20,
-    fontWeight: '600',
-  },
-  headerSpacer: {
-    width: 25,
-  },
-
+  backButton: { padding: 8 },
+  screenTitle: { color: 'white', fontSize: 20, fontWeight: '600' },
+  headerSpacer: { width: 25 },
   profilePictureContainer: {
     height: 140,
     width: 140,
@@ -170,12 +155,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: 'rgba(255,255,255,0.3)',
   },
-  profileImage: {
-    height: '100%',
-    width: '100%',
-    borderRadius: 70,
-  },
-
+  profileImage: { height: '100%', width: '100%', borderRadius: 70 },
   changePictureButton: {
     height: 44,
     width: 350,
@@ -191,13 +171,8 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginRight: 8,
   },
-  buttonIcon: {
-    marginLeft: 4,
-  },
-  profileListContainer: {
-    width: '100%',
-    marginTop: 32,
-  },
+  buttonIcon: { marginLeft: 4 },
+  profileListContainer: { width: '100%', marginTop: 32 },
   profileItem: {
     backgroundColor: 'rgba(255, 255, 255, 0.15)',
     padding: 18,
@@ -207,11 +182,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  profileItemText: {
-    fontSize: 18,
-    color: 'white',
-    fontWeight: '500',
-  },
+  profileItemText: { fontSize: 18, color: 'white', fontWeight: '500' },
 });
 
 export default ProfileScreen;

@@ -4,7 +4,8 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-
+import { Provider } from 'react-redux';
+import { store } from './screens/store/store';
 
 import LoginScreen from './screens/LoginAndSignUp/LoginScreen';
 import SignupScreen from './screens/LoginAndSignUp/SignupScreen';
@@ -30,23 +31,15 @@ const MainTabs = () => (
     screenOptions={{
       tabBarActiveTintColor: '#f5b20bff',
       tabBarInactiveTintColor: 'white',
-      tabBarLabelStyle: { 
-        fontWeight: 'bold',
-        paddingBottom: 5, 
-        marginTop: 2,  
-        // color: 'white',
-      },
-      tabBarIconStyle: {
-        marginTop: 2,     
-      },
+      tabBarLabelStyle: { fontWeight: 'bold', paddingBottom: 5, marginTop: 2 },
+      tabBarIconStyle: { marginTop: 2 },
       headerShown: false,
       tabBarStyle: {
-        // backgroundColor: '#5b200266',
-        backgroundColor: '#f5380d80',
+        backgroundColor: '#01161aea',
         borderTopWidth: 0.3,
-        elevation: 16, 
+        elevation: 16,
         shadowOpacity: 16,
-        height: 65,   
+        height: 65,
       },
     }}
   >
@@ -54,7 +47,6 @@ const MainTabs = () => (
       name="Home"
       component={HomeScreen}
       options={{
-        // eslint-disable-next-line react/no-unstable-nested-components
         tabBarIcon: ({ color, size }) => (
           <Icon name="home" color={color} size={size} />
         ),
@@ -65,7 +57,6 @@ const MainTabs = () => (
       name="Product"
       component={PhotoListScreen}
       options={{
-        // eslint-disable-next-line react/no-unstable-nested-components
         tabBarIcon: ({ color, size }) => (
           <Icon name="animation" color={color} size={size} />
         ),
@@ -76,7 +67,6 @@ const MainTabs = () => (
       name="Settings"
       component={SettingScreen}
       options={{
-        // eslint-disable-next-line react/no-unstable-nested-components
         tabBarIcon: ({ color, size }) => (
           <Icon name="cog" color={color} size={size} />
         ),
@@ -86,7 +76,7 @@ const MainTabs = () => (
   </Tab.Navigator>
 );
 
-const App = () => {
+const AppContent = () => {
   const [initialRoute, setInitialRoute] = useState<string | null>(null);
 
   useEffect(() => {
@@ -102,9 +92,7 @@ const App = () => {
     checkLogin();
   }, []);
 
-  if (!initialRoute) {
-    return null;
-  }
+  if (!initialRoute) return null;
 
   return (
     <NavigationContainer>
@@ -132,4 +120,10 @@ const App = () => {
   );
 };
 
-export default App;
+export default function App() {
+  return (
+    <Provider store={store}>
+      <AppContent />
+    </Provider>
+  );
+}
