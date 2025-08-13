@@ -12,6 +12,7 @@ import {
 import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useSelector } from 'react-redux';
+import { useTheme } from '../../src/context/ThemeContext';
 
 const DATA = [
   {
@@ -19,7 +20,7 @@ const DATA = [
     data: [
       { name: 'Profile', icon: 'account', iconColor: 'white' },
       { name: 'Media', icon: 'image', iconColor: 'white' },
-      { name: 'Friend List', icon: 'account-group', iconColor: 'white' },
+      { name: 'Theme', icon: 'theme-light-dark', iconColor: 'white' },
     ],
   },
   {
@@ -71,6 +72,7 @@ const Item = ({ name, icon, iconColor = '#555', onPress, profileImage }) => (
 
 const SettingScreen = ({ navigation }) => {
   const profileImage = useSelector(state => state.profile.profilePicture);
+  const { isDarkMode, toggleTheme } = useTheme();
 
   const handleItemPress = itemName => {
     switch (itemName) {
@@ -80,8 +82,9 @@ const SettingScreen = ({ navigation }) => {
       case 'Media':
         navigation.navigate('MediaScreen');
         break;
-      case 'Friend List':
-        Alert.alert('Friend List Tapped');
+      case 'Theme':
+        Alert.alert( !isDarkMode ? 'Dark Mode Active' : 'Light Mode Active');
+         toggleTheme();
         break;
       case 'Log Out':
         navigation.replace('Welcome');

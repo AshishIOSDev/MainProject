@@ -16,10 +16,11 @@ import LinearGradient from 'react-native-linear-gradient';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch, useSelector } from 'react-redux';
 import { setProfilePicture } from '../store/profileSlice';
-
+import { useTheme } from '../../src/context/ThemeContext';
 const ProfileScreen = ({ navigation }) => {
   const dispatch = useDispatch();
   const profileImage = useSelector(state => state.profile.profilePicture);
+  const { isDarkMode } = useTheme();
 
   const PROFILE_DATA = [
     { id: '1', title: 'Phone Number' },
@@ -83,7 +84,12 @@ const ProfileScreen = ({ navigation }) => {
           </View>
 
           <View style={styles.contentContainer}>
-            <View style={styles.profilePictureContainer}>
+            <View
+              style={[
+                styles.profilePictureContainer,
+                { borderColor: isDarkMode ? 'red' : 'rgba(255,255,255,0.3)' },
+              ]}
+            >
               {profileImage ? (
                 <Image
                   source={{ uri: profileImage }}
@@ -153,7 +159,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 2,
-    borderColor: 'rgba(255,255,255,0.3)',
   },
   profileImage: { height: '100%', width: '100%', borderRadius: 70 },
   changePictureButton: {
