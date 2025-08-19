@@ -1,27 +1,22 @@
 {
-  // Use IntelliSense to learn about possible attributes.
-  // Hover to view descriptions of existing attributes.
-  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
   "version": "0.2.0",
   "configurations": [
     {
       "name": "Debug Android",
-      "program": "${workspaceFolder}/.vscode/launchReactNative.js",
-      "type": "reactnative",
       "request": "launch",
+      "type": "reactnative",
       "platform": "android"
     },
     {
       "name": "Debug iOS",
-      "program": "${workspaceFolder}/.vscode/launchReactNative.js",
-      "type": "reactnative",
       "request": "launch",
+      "type": "reactnative",
       "platform": "ios"
     },
     {
-      "name": "Attach to Packager",
-      "type": "reactnative",
-      "request": "attach"
+      "name": "Attach to running app",
+      "request": "attach",
+      "type": "reactnative"
     }
   ]
 }

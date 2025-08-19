@@ -80,9 +80,6 @@ const HomeScreen = ({ navigation }) => {
   return (
     <SafeAreaProvider>
       <ImageBackground
-        // source={{
-        //   uri: 'https://w0.peakpx.com/wallpaper/479/900/HD-wallpaper-gradient-purple-blue-gradient-thumbnail.jpg',
-        // }}
         source={{uri: 'https://e1.pxfuel.com/desktop-wallpaper/445/615/desktop-wallpaper-papers-co-iphone-blur.jpg'}} 
         style={styles.backgroundImage}
         resizeMode="cover"
