@@ -76,6 +76,7 @@ android {
     ndkVersion rootProject.ext.ndkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
+    ndkVersion "21.4.7075529"
 
     namespace "com.mainproject"
     defaultConfig {
